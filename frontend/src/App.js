@@ -6,6 +6,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import Main from "./components/App/Main";
+
+
+
+
 import Login from "./components/App/Login";
 import Signup from "./components/App/Signup";
 import Records from "./components/Records/Records";
@@ -67,12 +71,12 @@ function App() {
   };
 
   const ProtectedRoute = ({ element, path }) => {
-    return checkAuthentication() ? element : <Navigate to="/home" />;
+    return checkAuthentication() ? element : <Navigate to="/" />;
   };
 
   const PublicRoute = ({ element, path }) => {
     const isAuthenticated = !!sessionStorage.getItem("token");
-    return isAuthenticated ? <Navigate to="/unauthorized" /> : element;
+    return isAuthenticated ? <Navigate to="/home" /> : element;
   };
 
   return (

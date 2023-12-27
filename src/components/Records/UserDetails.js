@@ -1,8 +1,6 @@
-// UserDetails.js
-
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
 function UserDetails() {
@@ -137,7 +135,6 @@ function UserDetails() {
           </div>
 
           <div className="flex items-center justify-center mt-6">
-            {/* Use Link instead of button */}
             <Link
               to={`/records/users/${id}/changepermissions`}
               className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded mr-4"
@@ -145,7 +142,6 @@ function UserDetails() {
               Change Permissions
             </Link>
 
-            {/* Back button as Link */}
             <Link to="/records/users" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
               Back
             </Link>

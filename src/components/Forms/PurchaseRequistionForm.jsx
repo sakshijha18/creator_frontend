@@ -5,30 +5,31 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import { currencies } from "../../utils";
 
-
 export default function PurchaseRequistionForm() {
-    const [age, setAge] = React.useState("");
+    const [purchase, setPurchase] = React.useState({
+        name: "",
+        des: "",
+        curr: "",
+        amount: "",
+        req_no: "",
+        purpose: "",
+        email: "",
+        date: "",
+        attach: ""
+    });
+    const handleChange = async (event) => {
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
+        setPurchase((prevPurchase) => ({
+            ...prevPurchase,
+            [event.target.name]: event.target.value
+        }));
+        console.log(purchase, "purchase");
     };
 
-    const categories = [
-        "science",
-        "sports",
-        "business",
-        "politics",
-        "entertainment",
-        "technology",
-        "world",
-        "all"
-    ];
+
     return (
         <React.Fragment>
             <Paper elevation={3} sx={{ marginRight: "15%", marginLeft: "15%" }}>
@@ -52,7 +53,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="title"
-                                name="title"
+                                name="name"
+                                value={purchase.name}
+                                onChange={handleChange}
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
@@ -76,7 +79,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="des"
+                                value={purchase.des}
+                                onChange={handleChange}
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
@@ -99,7 +104,10 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 id="outlined-select-currency"
                                 select
+                                name="curr"
                                 size="small"
+                                value={purchase.curr}
+                                onChange={handleChange}
                                 defaultValue="EUR"
 
                             >
@@ -113,9 +121,10 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="amount"
+                                value={purchase.amount}
+                                onChange={handleChange}
                                 size="small"
-
                                 autoComplete="off"
                                 variant="outlined"
                             />
@@ -136,13 +145,16 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="req_no"
+                                value={purchase.req_no}
+                                onChange={handleChange}
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
                                 variant="outlined"
                             />
-                        </Grid> <Grid item xs={12} sm={5}>
+                        </Grid>
+                        <Grid item xs={12} sm={5}>
                             <InputLabel
                                 required
                                 sx={{
@@ -159,7 +171,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="purpose"
+                                value={purchase.purpose}
+                                onChange={handleChange}
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
@@ -181,7 +195,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="email"
+                                value={purchase.email}
+                                onChange={handleChange}
                                 fullWidth
                                 size="small"
                                 autoComplete="off"
@@ -204,7 +220,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="date"
+                                value={purchase.date}
+                                onChange={handleChange}
                                 type="date"
                                 fullWidth
                                 size="small"
@@ -227,7 +245,9 @@ export default function PurchaseRequistionForm() {
                             <TextField
                                 required
                                 id="artist"
-                                name="artist"
+                                name="attach"
+                                value={purchase.attach}
+                                onChange={handleChange}
                                 type="file"
                                 fullWidth
                                 size="small"
@@ -235,8 +255,6 @@ export default function PurchaseRequistionForm() {
                                 variant="outlined"
                             />
                         </Grid>
-
-
                         <Grid item xs={12} sm={2}>
                             <Button variant="contained" sx={{ color: "white" }}>
                                 Save

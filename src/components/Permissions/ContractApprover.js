@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import DataNotFound from "../DataNotFound";
-import Navbar from "../Navbar";
+import DataNotFound from "../App/DataNotFound";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
 function ContractApprover() {

@@ -16,6 +16,18 @@ import Permissions from "./components/Permissions/Permissions";
 import UnauthorizedPage from "./components/App/UnauthorizedPage";
 import Forms from "./components/Forms/Forms";
 import PageNotFound from "./components/App/PageNotFound";
+import VendorForm from "./components/Forms/VendorForm";
+import MailForm from "./components/Forms/MailForm";
+import InvoiceForm from "./components/Forms/InvoiceForm";
+import GoodsForm from "./components/Forms/GoodsForm";
+import ContractForm from "./components/Forms/ContractForm";
+import ContractApprover from "./components/Permissions/ContractApprover";
+import InvoiceApprover from "./components/Permissions/InvoiceApprover";
+import InvoiceCreator from "./components/Permissions/InvoiceCreator";
+import VendorApprover from "./components/Permissions/VendorApprover";
+import VendorCreator from "./components/Permissions/VendorCreator";
+import GoodsReceiptCreator from "./components/Permissions/GoodsReceiptCreator";
+import UserDetails from "./components/Records/UserDetails";
 
 // import UserRecords from "./components/Records/UserRecords";
 // import VendorRecords from "./components/Records/VendorRecords";
@@ -118,6 +130,63 @@ function App() {
           <Route
             path="/forms"
             element={<ProtectedRoute element={<Forms />} />}
+          />
+
+<Route
+            path="/forms/vendor"
+            element={<ProtectedRoute element={<VendorForm />} />}
+          />
+
+<Route
+            path="/forms/mail"
+            element={<ProtectedRoute element={<MailForm />} />}
+          />
+
+<Route
+            path="/forms/invoice"
+            element={<ProtectedRoute element={<InvoiceForm />} />}
+          />
+
+<Route
+            path="/forms/goods"
+            element={<ProtectedRoute element={<GoodsForm />} />}
+          />
+          <Route
+            path="/forms/contract"
+            element={<ProtectedRoute element={<ContractForm />} />}
+          />
+
+<Route
+            path="/permissions/contractapprover"
+            element={<ProtectedRoute element={<ContractApprover />} />}
+          />
+          <Route
+            path="/permissions/invoicecreator"
+            element={<ProtectedRoute element={<InvoiceCreator />} />}
+          />
+          <Route
+            path="/permissions/invoiceapprover"
+            element={<ProtectedRoute element={<InvoiceApprover />} />}
+          />
+
+<Route
+            path="/permissions/vendorapprover"
+            element={<ProtectedRoute element={<VendorApprover />} />}
+          />
+
+<Route
+            path="/permissions/vendorcreator"
+            element={<ProtectedRoute element={<VendorCreator />} />}
+          />
+
+<Route
+            path="/permissions/goodsreceiptcreator"
+            element={<ProtectedRoute element={<GoodsReceiptCreator />} />}
+          />
+
+<Route
+            path="/records/users/:id"
+            element={<ProtectedRoute element={<UserDetails />} />}
           />
           <Route
             path="*"

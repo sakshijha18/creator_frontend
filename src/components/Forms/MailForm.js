@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 
 const MailForm = () => {
   const location = useLocation();

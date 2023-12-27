@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../App/Navbar";
+import PurchaseRequistionForm from "./PurchaseRequistionForm";
 
 const Forms = () => {
   return (
     <div>
       <Navbar />
-    <div className="container mx-auto mt-8 text-center">
-      <h2 className="text-4xl font-bold mb-8">Choose a Form</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+      <div className="container mx-auto mt-8 text-center">
+        {/* <h2 className="text-4xl font-bold mb-8">Choose a Form</h2> */}
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8">
         {formOptions.map((option, index) => (
           <Link key={index} to={option.route}>
             <div className="form-button transform transition-transform hover:scale-110 bg-white rounded-lg p-6 shadow-md flex flex-col items-center">
@@ -21,18 +22,15 @@ const Forms = () => {
             </div>
           </Link>
         ))}
+      </div> */}
+        <PurchaseRequistionForm />
       </div>
-    </div>
     </div>
   );
 };
 
 const formOptions = [
-  // {
-  //   title: "User",
-  //   route: "/user",
-  //   image: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  // },
+
   {
     title: "Vendor",
     route: "/forms/vendor",

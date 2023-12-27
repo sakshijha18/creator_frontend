@@ -6,10 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Main from "./components/App/Main";
-
-
-
-
 import Login from "./components/App/Login";
 import Signup from "./components/App/Signup";
 import Records from "./components/Records/Records";
@@ -21,35 +17,6 @@ import UnauthorizedPage from "./components/App/UnauthorizedPage";
 import Forms from "./components/Forms/Forms";
 import PageNotFound from "./components/App/PageNotFound";
 
-// import UserRecords from "./components/Records/UserRecords";
-// import VendorRecords from "./components/Records/VendorRecords";
-// import MailRecords from "./components/Records/MailRecords";
-// import InvoiceRecords from "./components/Records/InvoiceRecords";
-// import GoodsRecords from "./components/Records/GoodsRecords";
-// import ContractRecords from "./components/Records/ContractRecords";
-
-// import VendorForm from "./components/Forms/VendorForm";
-// import MailForm from "./components/Forms/MailForm";
-// import InvoiceForm from "./components/Forms/InvoiceForm";
-// import GoodsForm from "./components/Forms/GoodsForm";
-// import ContractForm from "./components/Forms/ContractForm";
-// import UserDetails from "./components/Records/UserDetails";
-// import VendorDetails from "./components/Records/VendorDetails";
-// import MailDetails from "./components/Records/MailDetails";
-// import InvoiceDetails from "./components/Records/InvoiceDetails";
-// import GoodsDetails from "./components/Records/GoodsDetails";
-// import ContractDetails from "./components/Records/ContractDetails";
-// import ImageViewer from "./components/ImageViewer";
-// import UserRole from "./components/roles/UserRole";
-// import AdminRole from "./components/roles/AdminRole";
-// import ChangePermissions from "./components/Records/ChangePermissions";
-// import ContractApprover from "./components/Permissions/ContractApprover";
-// import InvoiceCreator from "./components/Permissions/InvoiceCreator";
-// import InvoiceApprover from "./components/Permissions/InvoiceApprover";
-// import VendorApprover from "./components/Permissions/VendorApprover";
-// import VendorCreator from "./components/Permissions/VendorCreator";
-
-// import GoodsReceiptCreator from "./components/Permissions/GoodsReceiptCreator";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(

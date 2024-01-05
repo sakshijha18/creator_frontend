@@ -4,19 +4,14 @@ import DataNotFound from "../App/DataNotFound";
 import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
-function UserRecords() {
+function Roles() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/records/users?search=${encodeURIComponent(
-            searchKeyword
-          )}`
-        );
+        const response = await fetch("http://localhost:3001/api/records/users");
         const data = await response.json();
 
         if (data.length === 0) {
@@ -32,25 +27,13 @@ function UserRecords() {
     };
 
     fetchUsers();
-  }, [searchKeyword]);
+  }, []);
 
   return (
     <div>
       <Navbar />
       <div className="container mx-auto p-4 bg-white">
-        <h1 className="text-3xl font-bold mb-4 text-center">User Records</h1>
-
-        {/* Search bar */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search by ID, Name, or Email..."
-            className="border px-4 py-2 w-full rounded-xl"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-        </div>
-
+        <h1 className="text-3xl font-bold mb-4 text-center">Roles</h1>
         {loading ? (
           <div className="flex items-center justify-center h-screen">
             <RingLoader color="#718096" loading={true} size={80} />
@@ -70,9 +53,6 @@ function UserRecords() {
                 </th>
                 <th rowSpan={2} className="border px-4 py-2">
                   Role
-                </th>
-                <th rowSpan={2} className="border px-4 py-2">
-                  Status
                 </th>
                 <th
                   colSpan={6}
@@ -96,57 +76,69 @@ function UserRecords() {
                   <td className="border px-4 py-2 text-center">
                     <Link to={`/records/users/${user._id}`}>{user._id}</Link>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
                     <Link to={`/records/users/${user._id}`}>{user.name}</Link>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
                     <Link to={`/records/users/${user._id}`}>{user.email}</Link>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
                     <Link to={`/records/users/${user._id}`}>{user.role}</Link>
                   </td>
-
+                  {/* Display separate columns for each permission */}
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>{user.status}</Link>
+                    <i
+                      className={`${
+                        user.permissions.contractApprover
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.contractApprover ? "Yes" : "No"}
-                    </Link>
+                    <i
+                      className={`${
+                        user.permissions.invoiceCreator
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.invoiceCreator ? "Yes" : "No"}
-                    </Link>
+                    <i
+                      className={`${
+                        user.permissions.invoiceApprover
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.invoiceApprover ? "Yes" : "No"}
-                    </Link>
+                    <i
+                      className={`${
+                        user.permissions.vendorApprover
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.vendorApprover ? "Yes" : "No"}
-                    </Link>
+                    <i
+                      className={`${
+                        user.permissions.vendorCreator
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
-
                   <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.vendorCreator ? "Yes" : "No"}
-                    </Link>
-                  </td>
-
-                  <td className="border px-4 py-2 text-center">
-                    <Link to={`/records/users/${user._id}`}>
-                      {user.permissions.goodsReceiptCreator ? "Yes" : "No"}
-                    </Link>
+                    <i
+                      className={`${
+                        user.permissions.goodsReceiptCreator
+                          ? "fas fa-check text-green-500"
+                          : "fas fa-times text-red-500"
+                      } ml-2`}
+                    ></i>
                   </td>
                 </tr>
               ))}
@@ -160,4 +152,4 @@ function UserRecords() {
   );
 }
 
-export default UserRecords;
+export default Roles;

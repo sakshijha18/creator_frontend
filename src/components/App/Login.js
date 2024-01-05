@@ -27,24 +27,31 @@ const Login = ({ handleLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
         "http://localhost:3001/login",
         formData
       );
-
+  
       if (response.status === 200) {
         sessionStorage.setItem("token", response.data.token);
-        handleLogin(response.data.token);
-        navigate("/home");
+        sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("userName", response.data.userName);
+  
+        if (response.data.status === "Blocked") {
+          toast.error("Your account has been blocked");
+        } else {
+          handleLogin(response.data.token);
+          navigate("/home");
+        }
       } else {
         toast.error("Invalid username or password");
       }
     } catch (error) {
       handleError(error);
     }
-
+  
     setFormData({
       email: "",
       password: "",

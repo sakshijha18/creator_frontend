@@ -41,25 +41,33 @@ const VendorForm = () => {
     const { name, type } = e.target;
     const value = type === "file" ? e.target.files[0] : e.target.value;
 
+    // Retrieve user information from sessionStorage
+    const userId = sessionStorage.getItem("userId");
+    const userName = sessionStorage.getItem("userName");
+
     setFormData((prevFormData) => ({
       ...prevFormData,
+      recordOwnerId: userId,
+      recordOwnerName: userName,
       [name]: type === "file" ? e.target.files[0] : value,
     }));
   };
 
   const handleFileChange = (e, key) => {
     const file = e.target.files[0];
-    fileInputsRef.current[key] = file;
-    const fileReader = new FileReader();
+    // Check if key is defined
+    if (key && file) {
+      fileInputsRef.current[key] = file;
 
-    fileReader.onloadend = () => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [key]: file,
-      }));
-    };
+      const fileReader = new FileReader();
 
-    if (file) {
+      fileReader.onloadend = () => {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [key]: file,
+        }));
+      };
+
       fileReader.readAsDataURL(file);
     }
   };
@@ -637,11 +645,12 @@ const VendorForm = () => {
               onChange={(e) => handleChange(e)}
               className="mt-1 p-2 w-full border rounded-md"
               required
+              disabled
             >
-              <option value="pending">Pending for approval</option>
+              <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
-              <option value="onHold">On Hold</option>
+              <option value="onHold">Hold</option>
             </select>
           </div>
 

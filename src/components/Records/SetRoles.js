@@ -1,22 +1,11 @@
-// ChangePermissions.js
-
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function PermissionDropdown({ value, onChange }) {
-  return (
-    <select value={value} onChange={onChange}>
-      <option value="yes">Yes</option>
-      <option value="no">No</option>
-    </select>
-  );
-}
-
-function ChangePermissions() {
+function SetRoles() {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
@@ -44,7 +33,7 @@ function ChangePermissions() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ permissions: user.permissions }),
+        body: JSON.stringify({ role: user.role }),
       });
 
       if (response.ok) {
@@ -58,14 +47,10 @@ function ChangePermissions() {
     }
   };
 
-
-  const handlePermissionChange = (permission, newValue) => {
+  const handleRoleChange = (newValue) => {
     setUser((prevUser) => ({
       ...prevUser,
-      permissions: {
-        ...prevUser.permissions,
-        [permission]: newValue === "yes",
-      },
+      role: newValue,
     }));
   };
 
@@ -78,11 +63,11 @@ function ChangePermissions() {
         </div>
       ) : (
         <div>
-          <h1 className="text-3xl font-bold mt-8 mb-6 text-center">Edit Permissions</h1>
+          <h1 className="text-3xl font-bold mt-8 mb-6 text-center">Set Role</h1>
           <div className="flex items-center justify-center">
             <table className="table-auto bg-white">
               <tbody>
-              <tr>
+                <tr>
                   <td className="border px-4 py-2 font-bold">ID:</td>
                   <td className="border px-4 py-2">{user._id}</td>
                 </tr>
@@ -96,81 +81,45 @@ function ChangePermissions() {
                 </tr>
                 <tr>
                   <td className="border px-4 py-2 font-bold">Role:</td>
-                  <td className="border px-4 py-2">{user.role}</td>
+                  <td className="border px-4 py-2">
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleRoleChange(e.target.value)}
+                    >
+                      <option value="Admin">Admin</option>
+                      <option value="User">User</option>
+                      <option value="Vendor">Vendor</option>
+                    </select>
+                  </td>
                 </tr>
-                {/* ... (previous code) */}
                 <tr>
                   <td className="border px-4 py-2 font-bold">Contract Approver:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={user.permissions && user.permissions.contractApprover ? "yes" : "no"}
-                      onChange={(e) =>
-                        handlePermissionChange("contractApprover", e.target.value)
-                      }
-                    />
-                  </td>
+                  <td className="border px-4 py-2">{user.permissions.contractApprover ? "Yes" : "No"}</td>
                 </tr>
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Invoice Creator:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={user.permissions && user.permissions.invoiceCreator ? "yes" : "no"}
-                      onChange={(e) =>
-                        handlePermissionChange("invoiceCreator", e.target.value)
-                      }
-                    />
-                  </td>
+                  <td className="border px-4 py-2">{user.permissions.invoiceCreator ? "Yes" : "No"}</td>
                 </tr>
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Invoice Approver:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={user.permissions && user.permissions.invoiceApprover ? "yes" : "no"}
-                      onChange={(e) =>
-                        handlePermissionChange("invoiceApprover", e.target.value)
-                      }
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="border px-4 py-2 font-bold">Vendor Approver:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={user.permissions && user.permissions.vendorApprover ? "yes" : "no"}
-                      onChange={(e) =>
-                        handlePermissionChange("vendorApprover", e.target.value)
-                      }
-                    />
-                  </td>
+                  <td className="border px-4 py-2">{user.permissions.invoiceApprover ? "Yes" : "No"}</td>
                 </tr>
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Vendor Creator:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={user.permissions && user.permissions.vendorCreator ? "yes" : "no"}
-                      onChange={(e) =>
-                        handlePermissionChange("vendorCreator", e.target.value)
-                      }
-                    />
-                  </td>
+                  <td className="border px-4 py-2">{user.permissions.vendorCreator ? "Yes" : "No"}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Vendor Approver:</td>
+                  <td className="border px-4 py-2">{user.permissions.vendorApprover ? "Yes" : "No"}</td>
                 </tr>
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Goods Receipt Creator:</td>
-                  <td className="border px-4 py-2">
-                    <PermissionDropdown
-                      value={
-                        user.permissions && user.permissions.goodsReceiptCreator ? "yes" : "no"
-                      }
-                      onChange={(e) =>
-                        handlePermissionChange("goodsReceiptCreator", e.target.value)
-                      }
-                    />
-                  </td>
+                  <td className="border px-4 py-2">{user.permissions.goodsReceiptCreator ? "Yes" : "No"}</td>
                 </tr>
               </tbody>
             </table>
@@ -194,4 +143,4 @@ function ChangePermissions() {
   );
 }
 
-export default ChangePermissions;
+export default SetRoles;

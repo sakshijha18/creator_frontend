@@ -21,8 +21,14 @@ const ContractForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Retrieve user information from sessionStorage
+    const userId = sessionStorage.getItem("userId");
+    const userName = sessionStorage.getItem("userName");
+
     setFormData((prevData) => ({
       ...prevData,
+      recordOwnerId: userId,
+      recordOwnerName: userName,
       [name]: value,
     }));
   };

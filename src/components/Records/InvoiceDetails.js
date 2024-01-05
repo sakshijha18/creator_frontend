@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function InvoiceDetails() {
   const { id } = useParams();
   const [invoice, setInvoice] = useState({});
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState("");
+  const [editingStatus, setEditingStatus] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
     const fetchInvoiceDetails = async () => {
@@ -16,6 +21,12 @@ function InvoiceDetails() {
         );
         const data = await response.json();
         setInvoice(data);
+
+        const userResponse = await fetch(
+          `http://localhost:3001/api/records/users/${data.recordOwnerId}`
+        );
+        const userData = await userResponse.json();
+        setUserRole(userData.role);
       } catch (error) {
         console.error("Error fetching invoice details:", error);
       } finally {
@@ -26,6 +37,42 @@ function InvoiceDetails() {
     fetchInvoiceDetails();
   }, [id]);
 
+  const handleStatusChange = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/records/invoices/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: selectedStatus,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setInvoice({ ...invoice, status: selectedStatus });
+
+        setEditingStatus(false);
+
+        toast.success("Status Changed Successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        console.error("Failed to update status");
+
+        toast.error("Failed to update status", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -52,8 +99,28 @@ function InvoiceDetails() {
                 </tr>
 
                 <tr>
-                  <td className="border px-4 py-2 font-bold">Document Reference:</td>
-                  <td className="border px-4 py-2">{invoice.documentReference}</td>
+                  <td className="border px-4 py-2 font-bold">
+                    Record Owner Id:
+                  </td>
+                  <td className="border px-4 py-2">{invoice.recordOwnerId}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">
+                    Record Owner Name:
+                  </td>
+                  <td className="border px-4 py-2">
+                    {invoice.recordOwnerName}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">
+                    Document Reference:
+                  </td>
+                  <td className="border px-4 py-2">
+                    {invoice.documentReference}
+                  </td>
                 </tr>
 
                 <tr>
@@ -62,8 +129,12 @@ function InvoiceDetails() {
                 </tr>
 
                 <tr>
-                  <td className="border px-4 py-2 font-bold">Document Currency:</td>
-                  <td className="border px-4 py-2">{invoice.documentCurrency}</td>
+                  <td className="border px-4 py-2 font-bold">
+                    Document Currency:
+                  </td>
+                  <td className="border px-4 py-2">
+                    {invoice.documentCurrency}
+                  </td>
                 </tr>
 
                 <tr>
@@ -72,12 +143,9 @@ function InvoiceDetails() {
                 </tr>
 
                 <tr>
-                  <td className="border px-4 py-2 font-bold">
-                    Instructions:
-                  </td>
+                  <td className="border px-4 py-2 font-bold">Instructions:</td>
                   <td className="border px-4 py-2">{invoice.instructions}</td>
                 </tr>
-
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Attachment 1:</td>
@@ -123,11 +191,45 @@ function InvoiceDetails() {
 
                 <tr>
                   <td className="border px-4 py-2 font-bold">Status:</td>
-                  <td className="border px-4 py-2">{invoice.status}</td>
+                  <td className="border px-4 py-2">
+                    {editingStatus ? (
+                      <select
+                        value={selectedStatus}
+                        onChange={(e) => setSelectedStatus(e.target.value)}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Approve">Approve</option>
+                        <option value="Reject">Reject</option>
+                        <option value="Hold">Hold</option>
+                      </select>
+                    ) : (
+                      invoice.status
+                    )}
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {userRole === "Vendor" && (
+        <div className="flex items-center justify-center mt-6">
+          {editingStatus ? (
+            <button
+              onClick={handleStatusChange}
+              className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded mr-4"
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              onClick={() => setEditingStatus(true)}
+              className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded mr-4"
+            >
+              Set Status
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
 function MailDetails() {
@@ -44,6 +44,16 @@ function MailDetails() {
                 <tr>
                   <td className="border px-4 py-2 font-bold">Mail Id:</td>
                   <td className="border px-4 py-2">{mail._id}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Id:</td>
+                  <td className="border px-4 py-2">{mail.recordOwnerId}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Name:</td>
+                  <td className="border px-4 py-2">{mail.recordOwnerName}</td>
                 </tr>
 
                 <tr>

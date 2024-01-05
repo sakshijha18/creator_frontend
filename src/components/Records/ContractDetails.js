@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
 function ContractDetails() {
@@ -44,6 +44,16 @@ function ContractDetails() {
                 <tr>
                   <td className="border px-4 py-2 font-bold">Contract Id:</td>
                   <td className="border px-4 py-2">{contract._id}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Id:</td>
+                  <td className="border px-4 py-2">{contract.recordOwnerId}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Name:</td>
+                  <td className="border px-4 py-2">{contract.recordOwnerName}</td>
                 </tr>
 
                 <tr>

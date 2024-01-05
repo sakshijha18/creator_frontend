@@ -36,17 +36,19 @@ const Signup = ({ handleLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
         "http://localhost:3001/signup",
         formData
       );
-
+  
       if (response.data.success === true) {
         console.log(response.data);
         toast.success("User created successfully!");
         sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("userName", response.data.userName);
         handleLogin(response.data.token);
         navigate("/home");
       } else {
@@ -54,22 +56,32 @@ const Signup = ({ handleLogin }) => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Error creating user. Please try again.");
+      console.error("Detailed error response:", error.response);
+  
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error === "Email already exists"
+      ) {
+        toast.error("Email already exists. Please use a different email.");
+      } else {
+        toast.error("Error creating user. Please try again.");
+      }
     }
-
+  
     setFormData({
       name: "",
       email: "",
       password: "",
     });
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="max-w-md w-full p-6 bg-white rounded shadow-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">Signup</h2>
         <form onSubmit={handleSubmit}>
-
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -87,7 +99,7 @@ const Signup = ({ handleLogin }) => {
               required
             />
           </div>
-          
+
           <div className="mb-4">
             <label
               htmlFor="email"

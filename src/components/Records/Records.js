@@ -1,34 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../App/Navbar";
+import axios from "axios";
 
 const Records = () => {
-  
+  const [userData, setUserData] = useState({
+    permissions: {},
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = sessionStorage.getItem("userId");
+
+        if (!userId) {
+          return;
+        }
+
+        const response = await axios.get(`http://localhost:3001/api/profile/${userId}`);
+        const user = response.data;
+
+        if (user.error) {
+          // Handle error if needed
+        } else {
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <div>
-    <Navbar />
+      <Navbar />
       <div className="container mx-auto mt-8 text-center">
         <h2 className="text-4xl font-bold mb-8">Records</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8">
           {formOptions.map((option, index) => (
-            <Link key={index} to={option.route}>
-              <div className="form-button transform transition-transform hover:scale-110 bg-white rounded-lg p-6 shadow-md flex flex-col items-center">
-                <img
-                  src={option.image}
-                  alt={option.title}
-                  className="w-32 h-32 object-cover mb-4 rounded-lg"
-                />
-                <div className="text-black text-center text-lg">
-                  {option.title}
+
+            (userData.role === 'User' && (option.title === 'Invoice' || option.title === 'Goods')) ||
+
+            (userData.role === 'Vendor' && (option.title === 'Invoice')) ||
+
+            (userData.role === 'Vendor' ? null : (
+              (option.title === 'Vendor' && userData.permissions.vendorApprover) ||
+              (option.title === 'Contract' && userData.permissions.contractApprover) ||
+              (option.title === 'Mail' && userData.permissions.mailApprover) ||
+              (option.title === 'Goods' && userData.permissions.goodsApprover)
+            )) ||
+            
+            (userData.role === 'Admin' && option.title !== 'Invoice') ? (
+              <Link key={index} to={option.route}>
+                <div className="form-button transform transition-transform hover:scale-110 bg-white rounded-lg p-6 shadow-md flex flex-col items-center">
+                  <img
+                    src={option.image}
+                    alt={option.title}
+                    className="w-32 h-32 object-cover mb-4 rounded-lg"
+                  />
+                  <div className="text-black text-center text-lg">
+                    {option.title}
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            ) : null
           ))}
         </div>
       </div>
     </div>
   );
 };
+
 const formOptions = [
   {
     title: "User",

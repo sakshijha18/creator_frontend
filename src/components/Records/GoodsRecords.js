@@ -3,8 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import DataNotFound from "../DataNotFound";
+import Navbar from "../App/Navbar";
+import DataNotFound from "../App/DataNotFound";
 import { RingLoader } from "react-spinners";
 
 const Loader = () => {
@@ -20,9 +20,15 @@ const GoodsRecords = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchGoodsData = async () => {
+
     try {
+      const userId = sessionStorage.getItem("userId");
       const response = await axios.get("http://localhost:3001/api/records/goods");
-      setGoods(response.data);
+
+      const filteredGoods = response.data.filter(
+        (record) => record.recordOwnerId === userId
+      );
+      setGoods(filteredGoods);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching goods data:", error);
@@ -42,6 +48,19 @@ const GoodsRecords = () => {
         <h2 className="text-2xl font-semibold text-center mb-10">
           Goods Records
         </h2>
+
+        {/* Search bar */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by keyword"
+            className="border px-4 py-2 w-full rounded-xl"
+            // value={searchKeyword}
+            // onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+        </div>
+
+
         {loading ? (
           <Loader />
         ) : goods.length === 0 ? (
@@ -69,7 +88,7 @@ const GoodsRecords = () => {
                   <td className="border p-2">{goods.purchaseOrderNumber}</td>
                   <td className="border p-2">{goods.deliveryChallanDetails}</td>
                   <td className="border p-2">{goods.documentReference}</td>
-                  <td className="border p-2">{goods.recepientType}</td>
+                  <td className="border p-2">{goods.receiptType}</td>
                   <td className="border p-2">{goods.quantity}</td>
                   <td className="border p-2">{goods.itemDetails}</td>
                   <td className="border p-2">{goods.numberOfMonthsService}</td>

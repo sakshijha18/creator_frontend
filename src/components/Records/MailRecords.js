@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import DataNotFound from "../DataNotFound";
+import Navbar from "../App/Navbar";
+import DataNotFound from "../App/DataNotFound";
 import { RingLoader } from "react-spinners";
-import { FaCheck, FaTimes } from "react-icons/fa";
 
 const Loader = () => {
   return (
@@ -19,11 +18,23 @@ const Loader = () => {
 const MailRecords = () => {
   const [mails, setMails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filteredMails, setFilteredMails] = useState([]);
 
   const fetchMailData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/records/mails");
-      setMails(response.data);
+      const userId = sessionStorage.getItem("userId");
+      const response = await axios.get(
+        "http://localhost:3001/api/records/mails"
+      );
+
+      // Filter records based on userId
+      const filteredMails = response.data.filter(
+        (record) => record.recordOwnerId === userId
+      );
+
+      setMails(filteredMails);
+      setFilteredMails(filteredMails);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching mail data:", error);
@@ -36,14 +47,43 @@ const MailRecords = () => {
     fetchMailData();
   }, []);
 
+  // Function to filter mails based on search keyword
+  const handleSearch = useCallback(() => {
+    const filtered = mails.filter((mail) =>
+      Object.values(mail).some((value) =>
+        String(value).toLowerCase().includes(searchKeyword.toLowerCase())
+      )
+    );
+    setFilteredMails(filtered);
+  }, [searchKeyword, mails]);
+
+  // Handle search on input change
+  useEffect(() => {
+    handleSearch();
+  }, [searchKeyword, mails, handleSearch]);
+
   return (
     <div>
       <Navbar />
       <div className="bg-white p-8 mx-auto my-10 shadow-2xl rounded-lg">
-        <h2 className="text-2xl font-semibold text-center mb-10">Mail Records</h2>
+        <h2 className="text-2xl font-semibold text-center mb-10">
+          Mail Records
+        </h2>
+
+        {/* Search bar */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by keyword"
+            className="border px-4 py-2 w-full rounded-xl"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+        </div>
+
         {loading ? (
           <Loader />
-        ) : mails.length === 0 ? (
+        ) : filteredMails.length === 0 ? (
           <DataNotFound />
         ) : (
           <table className="w-full border">
@@ -56,7 +96,6 @@ const MailRecords = () => {
                 <th className="border p-2">Document Type</th>
                 <th className="border p-2">Document Currency</th>
                 <th className="border p-2">PO Number</th>
-                <th className="border p-2">Number of Attachments</th>
                 <th className="border p-2">Attachment 1</th>
                 <th className="border p-2">Attachment 2</th>
                 <th className="border p-2">Attachment 3</th>
@@ -67,7 +106,7 @@ const MailRecords = () => {
               </tr>
             </thead>
             <tbody>
-              {mails.map((mail) => (
+              {filteredMails.map((mail) => (
                 <tr key={mail._id}>
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>{mail._id}</Link>
@@ -78,65 +117,40 @@ const MailRecords = () => {
                   <td className="border p-2">{mail.documentType}</td>
                   <td className="border p-2">{mail.documentCurrency}</td>
                   <td className="border p-2">{mail.poNumber}</td>
-                  <td className="border p-2">{mail.numberOfAttachments}</td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment1 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment1 ? "Yes" : "No"}
                     </Link>
                   </td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment2 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment2 ? "Yes" : "No"}
                     </Link>
                   </td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment3 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment3 ? "Yes" : "No"}
                     </Link>
                   </td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment4 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment4 ? "Yes" : "No"}
                     </Link>
                   </td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment5 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment5 ? "Yes" : "No"}
                     </Link>
                   </td>
 
                   <td className="border p-2">
                     <Link to={`/records/mails/${mail._id}`}>
-                    {mail.attachment6 ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                      {mail.attachment6 ? "Yes" : "No"}
                     </Link>
                   </td>
 

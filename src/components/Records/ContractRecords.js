@@ -3,8 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import DataNotFound from "../DataNotFound";
+import Navbar from "../App/Navbar";
+import DataNotFound from "../App/DataNotFound";
 import { RingLoader } from "react-spinners";
 
 const Loader = () => {
@@ -21,8 +21,15 @@ const ContractRecords = () => {
 
   const fetchContractsData = async () => {
     try {
+      const userId = sessionStorage.getItem("userId");
       const response = await axios.get("http://localhost:3001/api/records/contracts");
-      setContracts(response.data);
+
+      // Filter records based on userId
+      const filteredContracts = response.data.filter(
+        (record) => record.recordOwnerId === userId
+      );
+
+      setContracts(filteredContracts);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching contracts data:", error);

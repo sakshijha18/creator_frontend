@@ -3,8 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import Navbar from "../Navbar";
-import DataNotFound from "../DataNotFound";
+import Navbar from "../App/Navbar";
+import DataNotFound from "../App/DataNotFound";
 import { RingLoader } from "react-spinners";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
@@ -22,10 +22,17 @@ const InvoiceRecords = () => {
 
   const fetchInvoiceData = async () => {
     try {
+      const userId = sessionStorage.getItem("userId");
       const response = await axios.get(
         "http://localhost:3001/api/records/invoices"
       );
-      setInvoice(response.data);
+
+      // Filter records based on userId
+      const filteredInvoice = response.data.filter(
+        (record) => record.recordOwnerId === userId
+      );
+
+      setInvoice(filteredInvoice);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching invoice data:", error);
@@ -60,7 +67,6 @@ const InvoiceRecords = () => {
                 <th className="border p-2">Document Currency</th>
                 <th className="border p-2">PO Number</th>
                 <th className="border p-2">Instructions</th>
-                <th className="border p-2">Number of Attachments</th>
                 <th className="border p-2">Attachment 1</th>
                 <th className="border p-2">Attachment 2</th>
                 <th className="border p-2">Attachment 3</th>
@@ -82,7 +88,6 @@ const InvoiceRecords = () => {
                   <td className="border p-2">{invoice.documentCurrency}</td>
                   <td className="border p-2">{invoice.poNumber}</td>
                   <td className="border p-2">{invoice.instructions}</td>
-                  <td className="border p-2">{invoice.numberOfAttachments}</td>
 
                   <td className="border p-2">
                     <Link to={`/records/invoices/${invoice._id}`}>

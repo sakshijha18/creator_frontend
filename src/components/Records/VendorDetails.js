@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../App/Navbar";
 import { RingLoader } from "react-spinners";
 
 function VendorDetails() {
@@ -50,6 +50,16 @@ function VendorDetails() {
                 <tr>
                   <td className="border px-4 py-2 font-bold">Contact Person:</td>
                   <td className="border px-4 py-2">{vendor.contactPerson}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Id:</td>
+                  <td className="border px-4 py-2">{vendor.recordOwnerId}</td>
+                </tr>
+
+                <tr>
+                  <td className="border px-4 py-2 font-bold">Record Owner Name:</td>
+                  <td className="border px-4 py-2">{vendor.recordOwnerName}</td>
                 </tr>
 
                 <tr>

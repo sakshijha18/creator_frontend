@@ -1,21 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation } from "react-router-dom";
 import Navbar from "../App/Navbar";
 
 const InvoiceForm = () => {
-  const location = useLocation();
-  const [userRole, setUserRole] = useState("user");
-
-  useEffect(() => {
-    if (location.pathname === "/invoice") {
-      setUserRole("user");
-    } else if (location.pathname === "/vendorData") {
-      setUserRole("admin");
-    }
-  }, [location.pathname]);
 
   const [formData, setFormData] = useState({
     companyName: "",
@@ -38,10 +27,14 @@ const InvoiceForm = () => {
 
   const handleChange = (e) => {
     const { name, type } = e.target;
+    const userId = sessionStorage.getItem("userId");
+    const userName = sessionStorage.getItem("userName");
     const value = type === "file" ? e.target.files[0] : e.target.value;
 
     setFormData((prevFormData) => ({
       ...prevFormData,
+      recordOwnerId: userId,
+      recordOwnerName: userName,
       [name]: type === "file" ? e.target.files[0] : value,
     }));
   };
@@ -396,18 +389,12 @@ const InvoiceForm = () => {
               onChange={(e) => handleChange(e)}
               className="mt-1 p-2 w-full border rounded-md"
               required
-              disabled={userRole !== "admin"}
+              disabled
             >
-              {userRole === "admin" ? (
-                <>
-                  <option value="pending">Pending for approval</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="onHold">On Hold</option>
-                </>
-              ) : (
-                <option value="pending">Pending for approval</option>
-              )}
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="onHold">Hold</option>
             </select>
           </div>
 
